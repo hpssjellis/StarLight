@@ -18,5 +18,11 @@ app.get('/',function(req,res)
   res.sendfile(__dirname+'/views/index.html');
 });
 
+app.io.route("starColor",function(req)
+{
+  var color=req.data.starColor;
+  console.log(color);
+});
+
 app.listen(8888);
 console.log("Server started and running.");
