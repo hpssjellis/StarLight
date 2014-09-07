@@ -20,7 +20,7 @@ app.get('/',function(req,res)
 
 app.io.route("starColor",function(req)
 {
-  var color=req.data.starColor;
+  var color=req.data.star;
   console.log(color);
 });
 

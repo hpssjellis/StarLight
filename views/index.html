@@ -57,6 +57,11 @@
         height:20px;
         width:20px;
       }
+      .dropdown-menu>li:hover
+      {
+        background-color:#428BCA;
+        color:#ffffff;
+      }
     </style>
 
   </head>
@@ -88,10 +93,12 @@
             <div class="row">
                 <label class="col-xs-4">Preset: </label>
               <div class="col-xs-8 dropdown">
-                <button type="button" name="starPreset" id="starPreset" class="btn btn-default dropdown-toggle presetBtn" data-toggle="dropdown">
-                  <span class="caret"></span> Random text
+                <button type="button" name="starPreset" id="starPreset" class="btn btn-default dropdown-toggle presetBtn" data-toggle="dropdown" onchange="emitStarPreset()">
+                  <!--Fix the cursor stuff here to pointer and default-->
+                  <span class="caret"></span>
+                  <span class="presetText">White</span>
                 </button>
-                <ul class="dropdown-menu" role="menu" style="margin-left:15px;">
+                <ul class="dropdown-menu" role="menu" style="margin-left:15px; cursor:pointer;">
                   <li><span>White</span></li> <!--Need to display text cursor here-->
                   <li>Cyan</li>
                   <li>Cyan-Fading</li>
@@ -136,20 +143,18 @@
 
       $(document).ready(function()
       {
-        $("INPUT.chooser").minicolors({theme:"bootstrap"});
+        $("INPUT.chooser").minicolors({theme:"bootstrap",
+                                       change:function(hex)
+                                       {
+                                         if(hex)
+                                          socket.emit('starColor',{star:hex});
+                                       }});
       });
-
-      function emitStarColor()
-      {
-        var color=document.getElementById("starColor").val();
-
-        socket.emit('starColor',{star:color});
-      }
 
       function emitStarPreset()
       {
         var preset=document.getElementById("starPreset").val();
-        
+        console.log(preset)
         socket.emit("starPreset",{star:preset});
       }
 
@@ -171,11 +176,17 @@
       {
         $(".dropdown-menu li").click(function()
         {
+          if($(".presetText").text()!=$(this).text())
+          {
           <!--Fix the part of the text/val that this changes so that the caret remains-->
-          $(".btn:first-child").text($(this).text());
-          $(".btn:first-child").val($(this).val());
+            $(".presetText").text($(this).text());
+            $(".presetText").val($(this).val());
+            console.log($(this).text());
+          }
         });
       });
+
+      
     </script>
   </body>
 </html>
