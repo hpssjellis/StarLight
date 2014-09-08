@@ -24,5 +24,23 @@ app.io.route("starColor",function(req)
   console.log(color);
 });
 
+app.io.route("starPreset",function(req)
+{
+  var preset=req.data.star;
+  console.log(preset);
+});
+
+app.io.route("starRange",function(req)
+{
+  var range=req.data.star;
+  console.log(range);
+});
+
+app.io.route("deskRange",function(req)
+{
+  var range=req.data.desk;
+  console.log(range);
+});
+
 app.listen(8888);
 console.log("Server started and running.");

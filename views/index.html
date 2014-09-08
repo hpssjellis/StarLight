@@ -93,7 +93,7 @@
             <div class="row">
                 <label class="col-xs-4">Preset: </label>
               <div class="col-xs-8 dropdown">
-                <button type="button" name="starPreset" id="starPreset" class="btn btn-default dropdown-toggle presetBtn" data-toggle="dropdown" onchange="emitStarPreset()">
+                <button type="button" name="starPreset" id="starPreset" class="btn btn-default dropdown-toggle presetBtn" data-toggle="dropdown">
                   <!--Fix the cursor stuff here to pointer and default-->
                   <span class="caret"></span>
                   <span class="presetText">White</span>
@@ -109,7 +109,7 @@
             <div class="row">
               <label class="col-xs-4">Brightness: </label>
               <div class="col-xs-8 sliderDiv">
-                <input type="range" name="starRange" id="starRange">
+                <input type="range" name="starRange" id="starRange" oninput="emitStarRange()">
               </div>
             </div>
           </div>
@@ -126,7 +126,8 @@
             <div class="row">
               <label class="col-xs-4">Brightness: </label>
               <div class="col-xs-8 sliderDiv">
-                <input type="range" name="deskRange" id="deskRange">
+                <input type="range" name="deskRange" id="deskRange" oninput="emitDeskRange()">
+                <!--Consider putting this in the script instead-->
               </div>
             </div>
           </div>
@@ -147,46 +148,39 @@
                                        change:function(hex)
                                        {
                                          if(hex)
-                                          socket.emit('starColor',{star:hex});
+                                          socket.emit("starColor",{star:hex});
                                        }});
       });
 
-      function emitStarPreset()
-      {
-        var preset=document.getElementById("starPreset").val();
-        console.log(preset)
-        socket.emit("starPreset",{star:preset});
-      }
-
       function emitStarRange()
       {
-        var range=document.getElementById("starRange").val();
-
+        var range=document.getElementById("starRange").value;
         socket.emit("starRange",{star:range});
+        console.log(range);
       }
 
       function emitDeskRange()
       {
         var range=document.getElementById("deskRange").val();
-
         socket.emit("deskRange",{desk:range});
+        console.log(range);
       }
 
       $(function()
       {
         $(".dropdown-menu li").click(function()
         {
-          if($(".presetText").text()!=$(this).text())
+          var preset=$(this).text();
+          if($(".presetText").text()!=preset)
           {
-          <!--Fix the part of the text/val that this changes so that the caret remains-->
-            $(".presetText").text($(this).text());
+            $(".presetText").text(preset);
             $(".presetText").val($(this).val());
-            console.log($(this).text());
+            socket.emit("starPreset",{star:preset});
+            console.log(preset);
           }
         });
       });
 
-      
     </script>
   </body>
 </html>
