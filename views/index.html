@@ -94,22 +94,20 @@
                 <label class="col-xs-4">Preset: </label>
               <div class="col-xs-8 dropdown">
                 <button type="button" name="starPreset" id="starPreset" class="btn btn-default dropdown-toggle presetBtn" data-toggle="dropdown">
-                  <!--Fix the cursor stuff here to pointer and default-->
                   <span class="caret"></span>
-                  <span class="presetText">White</span>
+                  <span id="presetText">White</span>
                 </button>
                 <ul class="dropdown-menu" role="menu" style="margin-left:15px; cursor:pointer;">
-                  <li><span>White</span></li> <!--Need to display text cursor here-->
+                  <li>White</li>
                   <li>Cyan</li>
-                  <li>Cyan-Fading</li>
-                  <li>BlueGreen-Fading</li>
+                  <li>BlueGreen</li>
                 </ul>
               </div>
             </div>
             <div class="row">
               <label class="col-xs-4">Brightness: </label>
               <div class="col-xs-8 sliderDiv">
-                <input type="range" name="starRange" id="starRange" oninput="emitStarRange()">
+                <input type="range" name="starRange" id="starRange">
               </div>
             </div>
           </div>
@@ -126,8 +124,7 @@
             <div class="row">
               <label class="col-xs-4">Brightness: </label>
               <div class="col-xs-8 sliderDiv">
-                <input type="range" name="deskRange" id="deskRange" oninput="emitDeskRange()">
-                <!--Consider putting this in the script instead-->
+                <input type="range" name="deskRange" id="deskRange">
               </div>
             </div>
           </div>
@@ -142,43 +139,34 @@
     <script>
       var socket=io.connect();
 
-      $(document).ready(function()
+      $("INPUT.chooser").minicolors(
       {
-        $("INPUT.chooser").minicolors({theme:"bootstrap",
-                                       change:function(hex)
-                                       {
-                                         if(hex)
-                                          socket.emit("starColor",{star:hex});
-                                       }});
+        theme:"bootstrap",
+        change:function(hex)
+        {
+          if(hex)
+            socket.emit("starColor",{star:hex});
+        }
       });
 
-      function emitStarRange()
+      $("#starRange").on('input',function()
       {
-        var range=document.getElementById("starRange").value;
-        socket.emit("starRange",{star:range});
-        console.log(range);
-      }
+        socket.emit("starRange",{star:$(this).val()});
+      });
 
-      function emitDeskRange()
+      $("#deskRange").on('input',function()
       {
-        var range=document.getElementById("deskRange").val();
-        socket.emit("deskRange",{desk:range});
-        console.log(range);
-      }
+        socket.emit("starRange",{star:$(this).val()});
+      });
 
-      $(function()
+      $(".dropdown-menu li").click(function()
       {
-        $(".dropdown-menu li").click(function()
+        var preset=$(this).text();
+        if($("#presetText").text()!=preset)
         {
-          var preset=$(this).text();
-          if($(".presetText").text()!=preset)
-          {
-            $(".presetText").text(preset);
-            $(".presetText").val($(this).val());
-            socket.emit("starPreset",{star:preset});
-            console.log(preset);
-          }
-        });
+          $("#presetText").text(preset);
+          socket.emit("starPreset",{star:preset});
+        }
       });
 
     </script>
