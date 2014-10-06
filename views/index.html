@@ -107,7 +107,7 @@
             <div class="row">
               <label class="col-xs-4">Brightness: </label>
               <div class="col-xs-8 sliderDiv">
-                <input type="range" name="starRange" id="starRange">
+                <input type="range" name="starRange" id="starRange" value="100">
               </div>
             </div>
           </div>
@@ -124,7 +124,7 @@
             <div class="row">
               <label class="col-xs-4">Brightness: </label>
               <div class="col-xs-8 sliderDiv">
-                <input type="range" name="deskRange" id="deskRange">
+                <input type="range" name="deskRange" id="deskRange" value="100">
               </div>
             </div>
           </div>
@@ -132,43 +132,10 @@
       </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js".></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/bootstrap.js"></script>
     <script src="js/jquery.minicolors.js"></script>
-    <script>
-      var socket=io.connect();
-
-      $("INPUT.chooser").minicolors(
-      {
-        theme:"bootstrap",
-        change:function(hex)
-        {
-          if(hex)
-            socket.emit("starColor",{star:hex});
-        }
-      });
-
-      $("#starRange").on('input',function()
-      {
-        socket.emit("starRange",{star:$(this).val()});
-      });
-
-      $("#deskRange").on('input',function()
-      {
-        socket.emit("starRange",{star:$(this).val()});
-      });
-
-      $(".dropdown-menu li").click(function()
-      {
-        var preset=$(this).text();
-        if($("#presetText").text()!=preset)
-        {
-          $("#presetText").text(preset);
-          socket.emit("starPreset",{star:preset});
-        }
-      });
-
-    </script>
+    <script src="js/index.js"></script>
   </body>
 </html>

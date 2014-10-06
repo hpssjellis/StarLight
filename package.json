@@ -5,6 +5,7 @@
   "dependencies": 
   {
     "express.io": "*",
+    "jade":"*",
     "sparkcloud": "*",
     "sparky": "*"
   }
